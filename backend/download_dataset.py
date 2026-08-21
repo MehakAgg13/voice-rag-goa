@@ -1,13 +1,13 @@
-from datasets import load_dataset
+from huggingface_hub import hf_hub_download
 
-print("Downloading dataset...")
+print("Downloading Hindi dataset...")
 
-# Download MSMARCO-XI
-dataset = load_dataset("ai4bharat/MSMARCO-XI")
+file_path = hf_hub_download(
+    repo_id="ai4bharat/MSMARCO-XI",
+    filename="train/hintrain.parquet",
+    repo_type="dataset"
+)
 
-print(dataset)
-
-# Save locally
-dataset.save_to_disk("data/msmarco_xi")
-
-print("Dataset downloaded successfully!")
+print("Download complete!")
+print("File location:")
+print(file_path)
