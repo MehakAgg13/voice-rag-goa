@@ -1,4 +1,6 @@
 import os
+from pathlib import Path
+
 from dotenv import load_dotenv
 from sarvamai import SarvamAI
 
@@ -11,12 +13,32 @@ if not api_key:
 
 client = SarvamAI(api_subscription_key=api_key)
 
-with open("audio test.mp3", "rb") as audio_file:
-    response = client.speech_to_text.transcribe(
-        file=audio_file,
-        model="saaras:v3",
-        mode="transcribe"
-    )
 
-print("Transcript:")
-print(response.transcript)
+def transcribe_audio(audio_path: str) -> str:
+    """
+    Convert an audio file into text using Sarvam AI.
+    """
+
+    path = Path(audio_path)
+
+    if not path.exists():
+        raise FileNotFoundError(
+            f"Audio file not found: {audio_path}"
+        )
+
+    with open(path, "rb") as audio_file:
+        response = client.speech_to_text.transcribe(
+            file=audio_file,
+            model="saaras:v3",
+            mode="transcribe"
+        )
+
+    return response.transcript
+
+
+if __name__ == "__main__":
+    audio_path = "audio test.mp3.wav"
+    transcript = transcribe_audio(audio_path)
+
+    print("Transcript:")
+    print(transcript)
